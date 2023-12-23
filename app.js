@@ -17,7 +17,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Connect to Database  
-connectDB();
+// connectDB();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -49,11 +49,18 @@ app.set('view engine', 'ejs');
 // Routes
 app.use('/', require('./server/routes/customer'))
 
+app.get('/', (req, res) => {
+  res.render('/views/index.ejs')
+})
+
 // Handle 404
 app.get('*', (req, res) => {
   res.status(404).render('404');
 });
 
-app.listen(port, ()=> {
-  console.log(`App listeing on port ${port}`)
-});
+connectDB().then(() => {
+  app.listen(port, () => {
+    console.log(`App listeing on port ${port}`)
+  });
+})
+
